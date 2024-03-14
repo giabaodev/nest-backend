@@ -12,18 +12,17 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('port');
   const logger = new Logger('Application');
-  await app.listen(PORT).then(() => {
-    logger.log('Application listening on port:', PORT);
-  }).catch((error) => {
-    logger.error('Application failed to start:', error);
-  });
+  await app
+    .listen(PORT)
+    .then(() => {
+      logger.log('Application listening on port:', PORT);
+    })
+    .catch((error) => {
+      logger.error('Application failed to start:', error);
+    });
 
   //swagger config
-  const config = new DocumentBuilder()
-    .setTitle('GB Store')
-    .setDescription('The store API')
-    .setVersion('1.0')
-    .build();
+  const config = new DocumentBuilder().setTitle('GB Store').setDescription('The store API').setVersion('1.0').build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 }

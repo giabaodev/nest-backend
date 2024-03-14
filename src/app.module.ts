@@ -4,7 +4,10 @@ import databaseConfig from './configs/database.config';
 import serverConfig from './configs/server.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './modules/product/product.module';
-import { AccountModule } from './modules/account/account.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
+import { CryptoModule } from './crypto/crypto.module';
 
 @Module({
   imports: [
@@ -16,7 +19,7 @@ import { AccountModule } from './modules/account/account.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {
-          type: 'mysql',
+          type: 'postgres',
           host: configService.get<string>('db_host'),
           port: configService.get<number>('db_port'),
           username: configService.get<string>('db_user'),
@@ -28,9 +31,11 @@ import { AccountModule } from './modules/account/account.module';
       },
     }),
     ProductModule,
-    AccountModule,
+    UserModule,
+    AuthModule,
+    CryptoModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [AuthService],
 })
 export class AppModule {}
