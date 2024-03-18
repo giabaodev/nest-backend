@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserService } from '../modules/user/user.service';
 import { LoginDto } from './dto/login.dto';
 
@@ -12,6 +12,6 @@ export class AuthService {
     //   throw new UnauthorizedException();
     // }
     // const { password, ...result } = user;
-    // return result;
+    return loginDto;
   }
 }
