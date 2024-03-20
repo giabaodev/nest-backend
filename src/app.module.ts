@@ -8,6 +8,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { CryptoModule } from './crypto/crypto.module';
           password: configService.get<string>('db_password'),
           database: configService.get<string>('db_name'),
           autoLoadEntities: true,
-          // synchronize: true,
+          synchronize: true,
         };
       },
     }),
@@ -34,6 +35,7 @@ import { CryptoModule } from './crypto/crypto.module';
     UserModule,
     AuthModule,
     CryptoModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [AuthService],
