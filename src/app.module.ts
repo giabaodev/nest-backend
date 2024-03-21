@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import databaseConfig from './configs/database.config';
 import serverConfig from './configs/server.config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductModule } from './modules/product/product.module';
-import { UserModule } from './modules/user/user.module';
-import { AuthService } from './auth/auth.service';
-import { AuthModule } from './auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { CategoryModule } from './modules/category/category.module';
+import { ProductModule } from './modules/product/product.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -33,11 +31,10 @@ import { CategoryModule } from './modules/category/category.module';
     }),
     ProductModule,
     UserModule,
-    AuthModule,
     CryptoModule,
     CategoryModule,
   ],
   controllers: [],
-  providers: [AuthService],
+  providers: [],
 })
 export class AppModule {}

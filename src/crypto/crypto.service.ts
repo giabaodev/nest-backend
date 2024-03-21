@@ -10,8 +10,11 @@ export class CryptoService {
   }
   verified(password: string, hashPassword: string) {
     const splitHash = hashPassword.split('.');
+    console.log('------splitHash---', splitHash);
     const hmac = createHmac('sha256', splitHash[0]);
+    console.log('------hmac---', hmac);
     const createPwHash = hmac.update(password).digest('base64');
+    console.log('------createPwHash---', createPwHash);
     return createPwHash === splitHash[1];
   }
 }

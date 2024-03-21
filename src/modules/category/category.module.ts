@@ -4,9 +4,10 @@ import { CategoryController } from './category.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Product } from '../product/entities/product.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category, Product])],
+  imports: [TypeOrmModule.forFeature([Category, Product]), AuthModule],
   controllers: [CategoryController],
   providers: [CategoryService],
   exports: [CategoryService],
