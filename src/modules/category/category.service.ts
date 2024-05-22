@@ -12,7 +12,7 @@ export class CategoryService {
     return this.categoryRepository.save(createCategoryDto);
   }
 
-  findAll() {
+  findAll(): Promise<Category[]> {
     return this.categoryRepository.find();
   }
 
@@ -28,7 +28,7 @@ export class CategoryService {
     throw new BadRequestException('Failed to update');
   }
 
-  remove(id: number) {
+  remove(id: number): string {
     return `This action removes a #${id} category`;
   }
 }

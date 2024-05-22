@@ -3,10 +3,15 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { LoggerFactory } from './logging/logger-factory';
+import { LoggerService } from './logging/logger.service';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+async function bootstrap(): Promise<void> {
+  const app = await NestFactory.create(AppModule, {
+    logger: LoggerFactory,
+  });
   app.enableCors({ origin: '*' });
+  app.useLogger(app.get(LoggerService));
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
@@ -20,16 +25,17 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger/api', app, document);
 
+  //server startup
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('port');
   const logger = new Logger('Application');
   await app
     .listen(PORT)
     .then(() => {
-      logger.log('Application listening on port:', PORT);
+      logger.log(`Application listening on port: ${PORT}`);
     })
     .catch((error) => {
-      logger.error('Application failed to start:', error);
+      logger.error(`Application failed to start: ${error}`);
     });
 }
 bootstrap();

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export default () => ({
   db_host: process.env.DATABASE_HOST,
   db_port: parseInt(process.env.DATABASE_PORT),
