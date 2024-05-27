@@ -9,13 +9,13 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() loginDto: LoginDto) {
+  signIn(@Body() loginDto: LoginDto): Promise<object> {
     return this.authService.signIn(loginDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Put('changepw')
-  updatePassword(@Body() passwordDto: ChangePWDto) {
+  updatePassword(@Body() passwordDto: ChangePWDto): Promise<string> {
     return this.authService.updatePassword(passwordDto);
   }
 }

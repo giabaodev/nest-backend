@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CryptoService } from 'src/crypto/crypto.service';
-import { UserService } from '../modules/user/user.service';
+import { CryptoService } from 'src/modules/crypto/crypto.service';
 import { LoginDto } from './dto/login.dto';
 import { ChangePWDto } from './dto/changePW.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +28,7 @@ export class AuthService {
     };
   }
 
-  async updatePassword(pwDto: ChangePWDto) {
+  async updatePassword(pwDto: ChangePWDto): Promise<string> {
     const hashPW = this.cryptoService.hash(pwDto.password);
     return hashPW;
   }
