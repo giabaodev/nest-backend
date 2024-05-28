@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -7,7 +11,10 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
-  constructor(@InjectRepository(Category) private categoryRepository: Repository<Category>) {}
+  constructor(
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+  ) {}
   create(createCategoryDto: CreateCategoryDto): Promise<Category> {
     return this.categoryRepository.save(createCategoryDto);
   }
@@ -22,9 +29,16 @@ export class CategoryService {
     return findCate;
   }
 
-  async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
-    const updateCategory = await this.categoryRepository.update(id, updateCategoryDto);
-    if (updateCategory.affected > 0) return await this.categoryRepository.findOneBy({ id });
+  async update(
+    id: number,
+    updateCategoryDto: UpdateCategoryDto,
+  ): Promise<Category> {
+    const updateCategory = await this.categoryRepository.update(
+      id,
+      updateCategoryDto,
+    );
+    if (updateCategory.affected > 0)
+      return await this.categoryRepository.findOneBy({ id });
     throw new BadRequestException('Failed to update');
   }
 

@@ -1,31 +1,21 @@
-import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Category } from '../../../modules/category/entities/category.entity';
+import { BaseEntity } from 'src/common/bases/base.entity';
+import { ProductSize } from 'src/common/enums/entity.enum';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'products' })
-export class Product {
+@Entity()
+export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column({ default: 1000 })
-  @IsNotEmpty()
+  @Column({ type: 'decimal', default: 0 })
   price: number;
 
-  @Column({ default: 0 })
-  quantity: number;
-
-  @Column({ nullable: true })
-  description: string;
-
-  @Column('text', { array: true, nullable: true })
-  images: string[];
+  @Column({ type: 'enum', enum: ProductSize, default: ProductSize.SM })
+  size: ProductSize;
 
   @Column({ default: true })
   isActive: boolean;
-
-  @ManyToOne(() => Category, (category) => category.products)
-  category: Category;
 }

@@ -4,15 +4,14 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { LoggerFactory } from './logging/logger-factory';
-import { LoggerService } from './logging/logger.service';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
     logger: LoggerFactory,
   });
   app.enableCors({ origin: '*' });
-  app.useLogger(app.get(LoggerService));
-  app.setGlobalPrefix('api/v1');
+  // app.useLogger(app.get(LoggerService));
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   //swagger config
@@ -20,10 +19,9 @@ async function bootstrap(): Promise<void> {
     .setTitle('GB Store')
     .setDescription('The store API')
     .setVersion('1.0')
-    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger/api', app, document);
+  SwaggerModule.setup('swagger', app, document);
 
   //server startup
   const configService = app.get(ConfigService);

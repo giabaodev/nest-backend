@@ -1,5 +1,10 @@
 import { PSError } from './../../constants/dbError';
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,7 +28,8 @@ export class UserService {
       await this.userRepository.save(createUser);
       return 'Create successfully';
     } catch (error) {
-      if (error.code === PSError.UniqueViolation) throw new ConflictException('Username is already taken');
+      if (error.code === PSError.UniqueViolation)
+        throw new ConflictException('Username is already taken');
       throw error;
     }
   }
@@ -42,7 +48,8 @@ export class UserService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     const updateUser = await this.userRepository.update(id, updateUserDto);
-    if (updateUser.affected > 0) return await this.userRepository.findOneBy({ id });
+    if (updateUser.affected > 0)
+      return await this.userRepository.findOneBy({ id });
     throw new BadRequestException('Failed to update');
   }
 }

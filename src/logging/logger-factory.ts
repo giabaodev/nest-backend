@@ -10,7 +10,9 @@ export const LoggerFactory = WinstonModule.createLogger({
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         format.colorize(),
         format.printf(({ timestamp, level, message, context, trace }) => {
-          return `${timestamp} [${context}] ${level}: ${message}${trace ? `\n${trace}` : ''}`;
+          return `${timestamp} [${context}] ${level}: ${message}${
+            trace ? `\n${trace}` : ''
+          }`;
         }),
       ),
     }),
@@ -20,7 +22,10 @@ export const LoggerFactory = WinstonModule.createLogger({
       zippedArchive: true,
       maxSize: '20m',
       maxFiles: '1d',
-      format: format.combine(format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), format.json()),
+      format: format.combine(
+        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        format.json(),
+      ),
     }),
   ],
 });

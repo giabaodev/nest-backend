@@ -1,24 +1,44 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { ProductService } from './product.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
+import { Product } from './entities/product.entity';
+import { ProductService } from './product.service';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { BaseResponse } from '@/common/bases/base.response';
 
 @Controller('product')
+@ApiTags('Product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  @ApiCreatedResponse()
+  async create(
+    @Body() createProductDto: CreateProductDto,
+  ): Promise<BaseResponse<Product>> {
+    const result = await this.productService.create(createProductDto);
+    return {
+      message: 'Product created successfully',
+      statusCode: HttpStatus.CREATED,
+      data: result,
+    };
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  async getListProduct(): Promise<Product[]> {
+    return await this.productService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  async getProductById(@Param('id') id: string): Promise<Product | null> {
+    return await this.productService.findOne(+id);
   }
 
   // @Patch(':id')
@@ -27,7 +47,7 @@ export class ProductController {
   // }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.delete(+id);
+  async remove(@Param('id') id: string): Promise<string> {
+    return await this.productService.delete(+id);
   }
 }

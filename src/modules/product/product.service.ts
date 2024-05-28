@@ -1,25 +1,26 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
-import { CategoryService } from '../category/category.service';
+import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
-    @Inject(CategoryService) private readonly categoryService: CategoryService,
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
-    const findCategory = await this.categoryService.findOne(createProductDto.categoryId);
-    const createProduct = { ...createProductDto, category: findCategory };
-    return this.productRepository.save(createProduct);
+    return await this.productRepository.save(createProductDto);
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productRepository.find();
+    return this.productRepository.find({
+      select: {
+        name: true,
+        price: true,
+      },
+    });
   }
 
   async findOne(id: number): Promise<Product | null> {

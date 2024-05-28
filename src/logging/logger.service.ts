@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as winston from 'winston';
-import * as DailyRotateFile from 'winston-daily-rotate-file';
+// import * as DailyRotateFile from 'winston-daily-rotate-file';
 
 @Injectable()
 export class LoggerService {
@@ -9,16 +9,19 @@ export class LoggerService {
   constructor() {
     this.logger = winston.createLogger({
       level: 'info',
-      format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
-      transports: [
-        new DailyRotateFile({
-          filename: './logs/application-%DATE%.log',
-          datePattern: 'YYYY-MM-DD',
-          zippedArchive: true,
-          maxSize: '20m',
-          maxFiles: '14d',
-        }),
-      ],
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json(),
+      ),
+      // transports: [
+      //   new DailyRotateFile({
+      //     filename: './logs/application-%DATE%.log',
+      //     datePattern: 'YYYY-MM-DD',
+      //     zippedArchive: true,
+      //     maxSize: '20m',
+      //     maxFiles: '14d',
+      //   }),
+      // ],
     });
 
     // Console log transport for non-production environments

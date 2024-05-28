@@ -8,7 +8,15 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from './modules/config/config.module';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule, ProductModule, UserModule, CryptoModule, CategoryModule, AuthModule],
+  imports: [
+    ConfigModule,
+    DatabaseModule,
+    ProductModule,
+    UserModule,
+    CryptoModule,
+    CategoryModule,
+    AuthModule,
+  ],
   controllers: [],
   providers: [],
 })

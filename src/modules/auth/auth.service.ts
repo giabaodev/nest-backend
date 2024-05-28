@@ -15,7 +15,8 @@ export class AuthService {
 
   async signIn(loginDto: LoginDto): Promise<object> {
     const user = await this.usersService.findUsername(loginDto.username);
-    if (user?.username !== loginDto.username) throw new BadRequestException('Incorrect username or password');
+    if (user?.username !== loginDto.username)
+      throw new BadRequestException('Incorrect username or password');
     if (!this.cryptoService.verified(loginDto.password, user?.password)) {
       throw new BadRequestException('Incorrect username or password');
     }
