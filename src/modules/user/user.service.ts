@@ -1,16 +1,15 @@
-import { PSError } from './../../constants/dbError';
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CryptoService } from '@/common/crypto/crypto.service';
 import { Repository } from 'typeorm';
-import { CryptoService } from 'src/modules/crypto/crypto.service';
+import { PSError } from '../../common/constants/dbError';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -20,7 +19,9 @@ export class UserService {
   ) {}
   async create(createUserDto: CreateUserDto): Promise<string> {
     try {
-      const hashPassword = this.cryptoService.hash(createUserDto.password);
+      const hashPassword = await this.cryptoService.hashText(
+        createUserDto.password,
+      );
       const createUser = this.userRepository.create({
         ...createUserDto,
         password: hashPassword,
@@ -46,10 +47,10 @@ export class UserService {
     return findUser;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
     const updateUser = await this.userRepository.update(id, updateUserDto);
     if (updateUser.affected > 0)
       return await this.userRepository.findOneBy({ id });
-    throw new BadRequestException('Failed to update');
+    return null;
   }
 }

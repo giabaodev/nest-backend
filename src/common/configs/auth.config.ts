@@ -8,5 +8,6 @@ export default registerAs(
       secretKey: process.env.JWT_SECRETKEY,
       expiresIn: ms(process.env.JWT_EXPIRATION) || '1d',
     },
+    saltRounds: Number.parseInt(process.env.SALT_ROUNDS),
   }),
 );
