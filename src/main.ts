@@ -2,7 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+import { AppModule } from './app/app.module';
 import { LoggerFactory } from './logging/logger-factory';
 
 async function bootstrap(): Promise<void> {
@@ -25,7 +25,7 @@ async function bootstrap(): Promise<void> {
 
   //server startup
   const configService = app.get(ConfigService);
-  const PORT = configService.get<number>('port');
+  const PORT = configService.get<number>('app.port');
   const logger = new Logger('Application');
   await app
     .listen(PORT)

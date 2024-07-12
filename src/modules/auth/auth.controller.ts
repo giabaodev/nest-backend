@@ -21,7 +21,7 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Put('changepw')
+  @Put('password-change')
   updatePassword(@Body() passwordDto: ChangePWDto): Promise<string> {
     return this.authService.updatePassword(passwordDto);
   }

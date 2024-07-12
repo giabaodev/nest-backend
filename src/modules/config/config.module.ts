@@ -9,8 +9,8 @@ import serverConfig from 'src/configs/server.config';
 @Module({
   imports: [
     NestConfigModule.forRoot({
-      // envFilePath: '.env.local',
       load: [databaseConfig, serverConfig],
+      envFilePath: ['.env'],
       isGlobal: true,
     }),
   ],
