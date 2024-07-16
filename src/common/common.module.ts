@@ -16,8 +16,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       inject: [DatabaseService],
       imports: [DatabaseModule],
-      useFactory: (databaseService: DatabaseService) =>
-        databaseService.createOptions(),
+      useFactory: (databaseService: DatabaseService) => {
+        return {
+          ...databaseService.createOptions(),
+          autoLoadEntities: true,
+        };
+      },
     }),
   ],
 })

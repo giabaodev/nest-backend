@@ -24,7 +24,7 @@ export class ProductService {
   }
 
   async findOne(id: number): Promise<Product | null> {
-    return this.productRepository.findOneBy({ id });
+    return await this.productRepository.findOneBy({ id });
   }
 
   // update(id: number, updateProductDto: UpdateProductDto) {

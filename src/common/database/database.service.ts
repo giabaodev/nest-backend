@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Database } from './interfaces/database.interface';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { Database } from './interfaces/database.interface';
+import { join } from 'path';
 
 @Injectable()
 export class DatabaseService implements Database {
@@ -22,7 +23,7 @@ export class DatabaseService implements Database {
       username,
       password,
       database,
-      entities: [__dirname + '/../**/*.entity.{js,ts}'],
+      // entities: ['src/**/*.entity.ts'],
       synchronize: env === 'dev',
     };
     return postgresOptions;

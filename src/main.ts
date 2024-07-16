@@ -1,32 +1,26 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestApplication, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { LoggerFactory } from './common/logging/logger-factory';
+import { MyLoggerService as MyLogger } from './common/logging/logger.service';
+import swaggerSetup from './swagger';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule, {
-    logger: LoggerFactory,
+  const app: NestApplication = await NestFactory.create(AppModule, {
+    bufferLogs: true,
   });
   app.enableCors({ origin: '*' });
-  // app.useLogger(app.get(LoggerService));
+  app.useLogger(app.get(MyLogger));
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  //swagger config
-  const config = new DocumentBuilder()
-    .setTitle('GB Store')
-    .setDescription('The store API')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document);
+  //swagger startup
+  swaggerSetup(app);
 
   //server startup
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('app.port');
-  const logger = new Logger('Application');
+  const logger = new Logger('NestApplication');
   await app
     .listen(PORT)
     .then(() => {
