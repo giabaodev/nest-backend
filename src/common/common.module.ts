@@ -5,11 +5,12 @@ import { DatabaseService } from '@/common/database/database.service';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import authConfig from './configs/auth.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [databaseConfig, serverConfig],
+      load: [databaseConfig, serverConfig, authConfig],
       envFilePath: ['.env'],
       isGlobal: true,
     }),

@@ -1,8 +1,6 @@
-import {
-  Injectable,
-  LoggerService,
-  Logger as NestLogger,
-} from '@nestjs/common';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Injectable, LoggerService } from '@nestjs/common';
 import { createLogger, format, Logger, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
@@ -36,7 +34,7 @@ export class MyLoggerService implements LoggerService {
     });
   }
 
-  public setContext(context: string) {
+  public setContext(context: string): void {
     this.context = context;
   }
 

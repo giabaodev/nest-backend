@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { NestApplication } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-export default function (app: NestApplication) {
+export default function (app: NestApplication): void {
   const logger = new Logger('NestApplication');
   const docPrefix = 'swagger';
   const config = new DocumentBuilder()

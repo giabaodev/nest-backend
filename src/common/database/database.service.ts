@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { Database } from './interfaces/database.interface';
-import { join } from 'path';
 
 @Injectable()
 export class DatabaseService implements Database {
