@@ -1,40 +1,47 @@
+import { BaseResponse } from '@/common/bases/base.response';
+import { CryptoService } from '@/common/crypto/crypto.service';
+import { randomString } from '@/utils/string.utils';
 import {
   Body,
+  ConflictException,
   Controller,
   Get,
-  Param,
-  ParseUUIDPipe,
-  Patch,
   Post,
   Query,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @Controller('user')
 @ApiTags('User')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly cryptoService: CryptoService,
+  ) {}
 
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
-  @Get(':uuid')
-  findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
-    return this.userService.findOne(uuid);
+  async createUser(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<BaseResponse<User>> {
+    const existEmail = await this.userService.existByEmail(createUserDto.email);
+    if (existEmail) throw new ConflictException('Email already exists');
+    const passwordString = randomString(10);
+    const password = await this.cryptoService.hashText(passwordString);
+    const result = await this.userService.create({
+      ...createUserDto,
+      password,
+    });
+    return BaseResponse.success<User>('Create user successfully', result);
   }
 
   @Get()
-  findOneByUsername(@Query('username') username: string) {
-    return this.userService.findUsername(username);
-  }
-
-  @Patch()
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  async findOneByUsername(
+    @Query('username') username: string,
+  ): Promise<BaseResponse<User>> {
+    const findUser = await this.userService.findByUsername(username);
+    return BaseResponse.success<User>('Find user successfully', findUser);
   }
 }

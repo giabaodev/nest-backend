@@ -1,18 +1,23 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
-@Unique(['username'])
+@Unique(['username', 'email'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column()
   username: string;
+
+  @Column()
+  email: string;
 
   @Column({ nullable: true })
   password: string;
 
-  @Column()
+  @Column({
+    name: 'full_name',
+  })
   fullName: string;
 
   @Column({ nullable: true })
@@ -21,12 +26,12 @@ export class User {
   @Column({ default: new Date() })
   birthday: Date;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'login_token' })
   loginToken: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'last_login' })
   lastLogin: Date;
 
-  @Column({ default: false })
+  @Column({ default: false, name: 'is_active' })
   isActive: boolean;
 }
